@@ -110,7 +110,7 @@ F_wc_2 = M_tmax*g*L_2*cos(th_2_wc_cyl2)./e_2_wc_cyl2; %% I put max of e_2 before
 
 delta_p = P_smax-1000000;
 
-D_1 = sqrt(4*F_wc_1/(pi*eta_c*delta_p)); %%0.1120 meters
+D_1 = sqrt(4*F_wc_1/(pi*eta_c*delta_p)); %%0.1142 meters
 D_2 = sqrt(4*F_wc_2/(pi*eta_c*delta_p)); %%0.077 meters
 
 %{
@@ -130,21 +130,67 @@ and an 80mm bore diameter CGH3 cylinder for the second cylinder.
 %}
 
 %{
-20I would calculate the area ratio just to make sure we are within the conditions
+I would calculate the area ratio just to make sure we are within the conditions
 We can also check from the datasheet if we are below the maximum stroke velocity during the drive cycle
 %}
 
 v_max_1 = 0.09*ones(length(time),1); %we haven't chosen this value yet
 v_max_2 = 0.16*ones(length(time),1); %we haven't chosen this value yet
 
+figure(5);
 plot(time,v_max_1);
 hold on
-plot(time,abs(v_p1));
+plot(time,v_p1);
 plot(time,v_max_2);
-plot(time,abs(v_p2));
+plot(time,v_p2);
 legend("Max Stroke Speed: Cylinder 1","Stroke Speed (Magnitude): Cylinder 1","Max Stroke Speed: Cylinder 2","Stroke Speed (Magnitude): Cylinder 2");
 xlabel("Time (s)");
 ylabel("Velocity (m/s)");
 title("Magnitude of Velocity vs Time")
 
 % Task 3.a
+
+F_dc1 = M_t*g*(L_1*cos(th_1)+L_2*cos(th_2))./e_1; 
+F_dc2 = M_t*g*(L_2*cos(th_2))./e_2;
+
+%{
+figure(6);
+plot(time,F_dc1);
+hold on
+plot(time,F_dc2);
+title("Force in drive cycle vs Time");
+ylabel("Force (N)");
+xlabel("Time (s)");
+legend("Cylinder 1: Drive-cycle Forces","Cylinder 2: Drive-cycle Forces")
+%}
+
+A_p1 = 0.04908;
+A_r1 = 0.02364;
+
+
+pump = (F_dc1.*v_p1 > 0);
+motor = (F_dc1.*v_p1 < 0);
+p1_cyl1 = F_dc1/(eta_c*A_p1) - (1000000*A_r1)/A_p1;
+p2_cyl1 = 1000000*ones(1,length(time));
+
+p1_cyl2 = F_dc2/(eta_c*A_p1) - (1000000*A_r1)/A_p1;
+p2_cyl2 = p2_cyl1;
+
+p_pump
+
+p_pump = p1_cyl1+p1_cyl2;
+
+close all
+
+figure(7);
+plot(time,p1_cyl1);
+hold on
+plot(time,p2_cyl1);
+plot(time,p1_cyl2);
+plot(time,p2_cyl2);
+plot(time,p_pump);
+plot(time,P_smax*ones(1,length(time)));
+ylim([5e+05 35e+06]);
+
+
+
