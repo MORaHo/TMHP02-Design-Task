@@ -176,11 +176,7 @@ p2_cyl1 = 1000000*ones(1,length(time));
 p1_cyl2 = F_dc2/(eta_c*A_p1) - (1000000*A_r1)/A_p1;
 p2_cyl2 = p2_cyl1;
 
-p_pump
-
 p_pump = p1_cyl1+p1_cyl2;
-
-close all
 
 figure(7);
 plot(time,p1_cyl1);
@@ -190,7 +186,65 @@ plot(time,p1_cyl2);
 plot(time,p2_cyl2);
 plot(time,p_pump);
 plot(time,P_smax*ones(1,length(time)));
-ylim([5e+05 35e+06]);
+ylim([0 32e+06]);
 
+%%%%%%%%%%%%%%%%% Quiz 1-3b %%%%%%%%%%%%%%%%%%%%
 
+M_t = 4659;
+p_smax = 34500000;
+p_1 = p_smax - 2000000;
+p_2 = 1000000;
+th_1 = 1;
+th_2 = 0.08;
+e_1 = 0.267;
+e_2 = 0.492;
+eta_c = 0.9;
 
+F_1 = M_t*g*(L_1*cos(th_1)+L_2*cos(th_2))./e_1;
+F_2 = M_t*g*L_2*cos(th_2)./e_2;
+
+A_1 = F_1/(eta_c*(p_1-0.5*p_2));
+D_1 = sqrt(4*A_1/pi);
+A_2 = F_2/(eta_c*(p_1-0.5*p_2));
+D_2 = sqrt(4*A_2/pi);
+
+D_1 = 0.2;
+D_2 = 0.1;
+v_1 = 0.05;
+v_2 = 0.06;
+eta = 0.03;
+n_p = 1500/60;
+C_v = 1.3*10^(-9);
+
+A_p1 = pi*D_1^2/4;
+A_p2 = pi*D_2^2/4;
+A_1 = A_p1;
+A_2 = A_p2;
+q_1 = A_1*v_1;
+q_2 = A_2*v_2;
+
+q = q_1+q_2
+eta_vol = 1 - C_v*(p_smax)/(n_p*eta)
+D_p = q/(n_p*eta_vol) * 10^6
+
+D_1 = 0.2;
+D_2 = 0.1;
+v_1 = 0.03;
+v_2 = 0.021;
+eta = 0.03;
+n_p = 1500/60;
+C_v = 1.3*10^(-9);
+
+A_p1 = pi*D_1^2/4;
+A_p2 = pi*D_2^2/4;
+A_r1 = 0.5*A_p1;
+A_r2 = 0.5*A_p2;
+q_1 = A_r1*v_1;
+q_2 = A_r2*v_2;
+
+q = q_1+q_2;
+eta_vol = 1 - C_v*(p_smax)/(n_p*eta);
+D_p = q/(n_p*eta_vol) * 10^6;
+
+p_1 = (F_1/eta_c + p_2*A_r1)/(A_p1)
+p_1 = (p_2*A_r2 + F_2*eta_c)/(A_p2)

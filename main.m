@@ -44,7 +44,10 @@ L_2 = 3.5;
 v_p0 = 0.13;
 t_0 = 10;
 P_smax = 30000000;
+p_1max = 30000000 - 2000000;
 eta_c = 0.94;
+
+p_2 = 1000000;
 
 % Constants and Time
 
@@ -108,35 +111,31 @@ legend("F_1","F_2");
 F_wc_1 = M_tmax*g*(L_1*cos(th_1_wc_cyl1)+L_2*cos(th_2_wc_cyl1))./e_1_wc_cyl1; %%I put max of e_1 before, so now it's bigger, but more correct
 F_wc_2 = M_tmax*g*L_2*cos(th_2_wc_cyl2)./e_2_wc_cyl2; %% I put max of e_2 before, so now it's bigger, but more correct.
 
-delta_p = P_smax-1000000;
-
-D_1 = sqrt(4*F_wc_1/(pi*eta_c*delta_p)); %%0.1120 meters
-D_2 = sqrt(4*F_wc_2/(pi*eta_c*delta_p)); %%0.077 meters
-
-%{
-I think we should consider a smaller area on the rod since, ad 0.5A_H
-This would increase the required diameter, and would be more physically correct
-The chosen cylinders would change but they exist so I should be fine
-%}
-
-close all
+A_1 = F_wc_1/(eta_c*(p_1max-0.5*p_2))
+D_1 = sqrt(4*A_1/pi) 
+A_2 = F_wc_2/(eta_c*(p_1max-0.5*p_2))
+D_2 = sqrt(4*A_2/pi) 
 
 % Task 2.b
 
 %{
-https://www.boschrexroth.com/en/gb/p/hydraulic-cylinder-r900999033/ 
-17 We've chosen a CGH3 type hydraulic cylinder with 125mm diameter for the first cylinder,
-and an 80mm bore diameter CGH3 cylinder for the second cylinder.
+17We've chosen a CGH3 type hydraulic cylinder with 180mm diameter for the first cylinder,
+and an 140mm bore diameter CGH3 cylinder for the second cylinder.
 %}
 
-%{
-20I would calculate the area ratio just to make sure we are within the conditions
-We can also check from the datasheet if we are below the maximum stroke velocity during the drive cycle
-%}
+%% Chosen Areas %%
 
-v_max_1 = 0.09*ones(length(time),1); %we haven't chosen this value yet
+A_p1 = 0.025447;
+A_r1 = 0.013175;
+A_p2 = 0.015394;
+A_r2 = 0.007540;
+
+%% Checking that the velocity is below the required velocity
+
+v_max_1 = 0.14*ones(length(time),1); %we haven't chosen this value yet
 v_max_2 = 0.16*ones(length(time),1); %we haven't chosen this value yet
 
+figure(5);
 plot(time,v_max_1);
 hold on
 plot(time,abs(v_p1));
@@ -148,3 +147,59 @@ ylabel("Velocity (m/s)");
 title("Magnitude of Velocity vs Time")
 
 % Task 3.a
+
+v_1_pos = v_p1 > 0;
+v_1_neg = v_p1 < 0;
+v_1_stat = v_p1 == 0;
+eta_c1 = v_1_pos./eta_c + v_1_neg*eta_c + v_1_stat;
+v_2_pos = v_p2 > 0;
+v_2_neg = v_p2 < 0;
+v_2_stat = v_p2 == 0;
+eta_c2 = v_2_pos./eta_c + v_2_neg*eta_c + v_2_stat;
+
+
+p_2 = p_2*ones(1,length(time));
+p_1_cyl1 = (F_1./eta_c1 + p_2*A_r1)/(A_p1);
+p_1_cyl2 = (p_2*A_r2 + F_2.*eta_c2)/(A_p2);
+p_1max_cyl1 = max(p_1_cyl1);
+p_1max_cyl2 = max(p_1_cyl2);
+p_min = max([p_1max_cyl1 p_1max_cyl2]) * ones(1,length(time));
+
+%{
+p_min = zeros(1,length(time));
+
+for i = 1:length(time)
+    p_min(i) = max([p_1_cyl1(i) p_1_cyl2(i)]);
+end
+%}
+
+figure(6);
+plot(time,p_1_cyl1);
+hold on
+plot(time,p_1_cyl2);
+plot(time,p_2);
+plot(time,p_min);
+plot(time,p_1max*ones(1,length(time)));
+title("Pressure vs Time");
+xlabel("Time (s)");
+ylabel("Pressure (Pa)");
+legend("P1 - Cylinder 1","P1 - Cylinder 2", "P2", "Minimum Pressure", "Maximum Pressure");
+ylim([0 3e+07]);
+
+% Task 3.b
+
+q_1 = A_p1*v_p1.*v_1_pos + A_r1*abs(v_p1).*v_1_neg;
+q_2 = A_p2*v_p2.*v_2_pos + A_r1*abs(v_p2).*v_2_neg;
+q_tot = q_1 + q_2;
+q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
+
+figure(7);
+plot(time,q_1);
+hold on
+plot(time,q_2);
+plot(time,q_tot);
+plot(time,q_max);
+title("Volumetric Flow vs Time");
+ylabel("Volumetric Flow (m^3/s)");
+xlabel("Time (s)");
+legend("Cylinder 1","Cylinder 2","Total Flow","Maximum Flow");
