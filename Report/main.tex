@@ -1,0 +1,143 @@
+\documentclass[12pt]{article}
+
+\usepackage{bookmark}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage[a4paper,bottom=2.0cm,top=2.0cm,left=2.0cm,right=2.0cm]{geometry}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{blindtext}
+\usepackage{multicol}
+\usepackage{lipsum}
+\usepackage{wrapfig}
+\usepackage{subfig}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{listings}
+
+\graphicspath{{Figures},{Plots}}
+
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+\input{./colour}
+
+\renewcommand{\title}{Design Task - Lorry Crane Hydraulics}
+\renewcommand{\author}{
+    Logan Borer\\
+    Matteo Sanderson\\
+    Arun Thirumani }
+\newcommand{\course}{Fluid Power Systems}
+\newcommand{\advisor}{Samuel Kärnell}
+\newcommand{\firstcoadvisor}{Róger Mateus Sehnem,}
+\newcommand{\secondcoadvisor}{Artur Tozzi de Cantuaria Gama}
+\newcommand{\YEAR}{2026}
+
+\begin{document}
+
+    \pagenumbering{gobble}
+    \input{./title_page}
+    \setstretch{1.5}
+
+    \newpage
+    \tableofcontents
+    \newpage
+
+    \pagenumbering{arabic}
+
+    %% Template ends here (barring final line which also needed to be included)
+
+    \section{Design Task Definition}
+
+        The objective of the design is to design a lorry crane, that can operative with a given mass over a defined drive cycle, and withstand a worst-case loading scenario.\\
+        For the task a certain values were given, mainly defining the drive cycle. Some values were true for all group, while others were group specific.
+
+        \subsection{General Values}
+
+            The general values for the drive-cycle provided included:\\
+            \begin{itemize}
+                \item $v_p01$ $\rightarrow$ Normalised velocity vector for piston 1
+                \item $v_p02$ $\rightarrow$ Normalised velocity vector for piston 2
+                \item $e_1$ $\rightarrow$ Level-arm for cylinder 1
+                \item $e_2$ $\rightarrow$ Level-arm for cylinder 2
+                \item $\theta_1$ $\rightarrow$ First arm angle
+                \item $\theta_2$ $\rightarrow$ Second arm angle
+                \item $L_0$ $\rightarrow$ Base height for lorry crane
+                \item $p_2$ $\rightarrow$ Pressure on low-pressure side
+                \item $\eta$ $\rightarrow$ Oil dynamic viscosity
+                \item $c_v$ $\rightarrow$ Laminar leakage loss coefficient
+                \item $k_p$ $\rightarrow$ Coloumb friction coefficient
+                \item $k_v$ $\rightarrow$ Viscous friction loss coefficient
+                \item $k_{\epsilon}$ $\rightarrow$ Displacement coefficient
+            \end{itemize}
+            The information on the work-case scenario, provided the following values:
+            \begin{center}
+                \begin{tabular}{cccc}
+                    \hline
+                    Parameter & & Cylinder 1 & Cylinder 2\\
+                    \hline
+                    $\theta_{1,wc} [\text{rad}]$ & & 1,2 & 0,35\\
+                    $\theta_{2,wc} [\text{rad}]$ & & 0,0  & 0,0\\
+                    $e_{1,wc} [\text{m}]$ & & 0,14 & 0,48\\
+                    $e_{2,wc} [\text{m}]$ & & 0.57 & 0,17\\
+                    \hline
+                \end{tabular}
+            \end{center}
+         
+        \subsection{Group-specific values}
+            There were many group-specific values that we were given for the design task, these included:
+            \begin{itemize}
+                \item $M_{t,wc}$ $\rightarrow$ Maximum total load mass
+                \item $q_{r,wc}$ $\rightarrow$ Worst-case flow to drive-cycle-max flow ratio
+                \item $M_t$ $\rightarrow$ Total load mass
+                \item $L_1$ $\rightarrow$ First arm length
+                \item $L_2$ $\rightarrow$ Second arm length
+                \item $v_{p0}$ $\rightarrow$ Reference cylinder velocity
+                \item $t_0$ $\rightarrow$ Drive-cycle Time
+                \item $P_{s,max}$ $\rightarrow$ Maximum system pressure
+                \item $\eta_c$ $\rightarrow$ Cylinder Efficiency
+            \end{itemize}    
+            
+        \subsection{Denormalisation and discretization}
+
+            From the provided values we can see that the velocity profile which we were provided has been normalised and we have been provided a reference value.
+            Using this reference value we denormalised the normalised velocity profile, to determine the effective velocity profile of the two cylinders.
+            \begin{align*}
+                v_{p1} = v_{p0} * v_{p01}
+                v_{p2} = v_{p1} * v_{p02}
+            \end{align*}
+            Additionally, we discretized time to a number of discrete times equal to the length of the provided vectors for velocity, angles and arms, as such:
+            \begin{lstlisting}[language=Octave]
+                time = linspace(0,t_0,length(e_1));
+            \end{lstlisting}
+
+
+    \section{Cylinder Sizing and Selection}
+        blablabla 
+    
+    \section{Circuit Drive-cycle Analysis}
+        sdfvddsfsdfsdf
+        \begin{equation}
+            q = C_qA\sqrt{\frac{2}{\rho}\cdot\Delta p}
+        \end{equation}
+        \begin{figure}[!ht]
+            \centering
+            \includegraphics[width = .8\linewidth]{liu_logo.png}\\
+        \end{figure}
+
+    \section{Pump Selection}
+
+    \section{System Analysis and Efficiency}
+
+    \section{Cooler Dimensioning}
+    
+\end{document}

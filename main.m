@@ -59,8 +59,6 @@ time = linspace(0,t_0,length(e_1));
 v_p1 = v_p0*v_p01;
 v_p2 = v_p0*v_p02;
 
-time = linspace(0,t_0,length(e_1));
-
 % Task 1.a
 
 figure(1);
@@ -69,10 +67,10 @@ plot(time,e_1);
 hold on
 plot(time,e_2);
 
-legend("th_1","th_2")
+legend("e_1","e_2")
 xlabel("Time (s)")
 ylabel("e1, e2 (m)")
-title("e_1 vs Time & e_2 vs Time")
+title("Arm Length vs Time")
 
 az = L_1 * sin(th_1);
 ax = L_1 * cos(th_1);

@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Design Task Definition}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}General Values}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Group-specific values}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Denormalisation and discretization}{2}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Cylinder Sizing and Selection}{2}{section.2}%
+\contentsline {section}{\numberline {3}Circuit Drive-cycle Analysis}{3}{section.3}%
+\contentsline {section}{\numberline {4}Pump Selection}{3}{section.4}%
+\contentsline {section}{\numberline {5}System Analysis and Efficiency}{3}{section.5}%
+\contentsline {section}{\numberline {6}Cooler Dimensioning}{3}{section.6}%

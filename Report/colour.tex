@@ -1,0 +1,27 @@
+\definecolor{bluePoli}{cmyk}{0.4,0.1,0,0.4}
+\declaretheoremstyle[
+  headfont=\color{bluePoli}\normalfont\bfseries,
+  bodyfont=\color{black}\normalfont\itshape,
+]{colored}
+
+\captionsetup[figure]{labelfont={color=bluePoli}} % Set colour of the captions
+\captionsetup[table]{labelfont={color=bluePoli}} % Set colour of the captions
+\captionsetup[algorithm]{labelfont={color=bluePoli}} % Set colour of the captions
+
+\titleformat{\section}
+{\color{bluePoli}\normalfont\Large\bfseries}
+{\color{bluePoli}\thesection.}{1em}{}
+\titlespacing*{\section}
+{0pt}{3.3ex}{3.3ex}
+
+\titleformat{\subsection}
+{\color{bluePoli}\normalfont\large\bfseries}
+{\color{bluePoli}\thesubsection.}{1em}{}
+\titlespacing*{\subsection}
+{0pt}{3.3ex}{3.3ex}
+
+\titleformat{\subsubsection}
+{\color{bluePoli}\normalfont\large\bfseries}
+{\color{bluePoli}\thesubsubsection.}{1em}{}
+\titlespacing*{\subsubsection}
+{0pt}{3.3ex}{3.3ex}
