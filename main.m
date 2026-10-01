@@ -74,7 +74,7 @@ title("Arm Length vs Time")
 
 az = L_1 * sin(th_1);
 ax = L_1 * cos(th_1);
-bz = L_2 * sin(th_2) + az + 3;
+bz = L_2 * sin(th_2) + az + L_0;
 bx = L_2 * cos(th_2) + ax;
 
 figure(2);
@@ -109,10 +109,10 @@ legend("F_1","F_2");
 F_wc_1 = M_tmax*g*(L_1*cos(th_1_wc_cyl1)+L_2*cos(th_2_wc_cyl1))./e_1_wc_cyl1; %%I put max of e_1 before, so now it's bigger, but more correct
 F_wc_2 = M_tmax*g*L_2*cos(th_2_wc_cyl2)./e_2_wc_cyl2; %% I put max of e_2 before, so now it's bigger, but more correct.
 
-A_1 = F_wc_1/(eta_c*(p_1max-0.5*p_2))
-D_1 = sqrt(4*A_1/pi) 
-A_2 = F_wc_2/(eta_c*(p_1max-0.5*p_2))
-D_2 = sqrt(4*A_2/pi) 
+A_1 = F_wc_1/(eta_c*(p_1max-0.5*p_2)) % 0.020437
+D_1 = sqrt(4*A_1/pi) % 0.1613
+A_2 = F_wc_2/(eta_c*(p_1max-0.5*p_2)) % 0.014064
+D_2 = sqrt(4*A_2/pi) % 0.1338
 
 % Task 2.b
 

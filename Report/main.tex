@@ -23,6 +23,17 @@
 \usepackage{cleveref}
 \usepackage{listings}
 
+\lstset{frame=tb,
+  language=Octave,
+  breaklines=true,
+  showstringspaces=false,
+  columns=flexible,
+  numbers=none,
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  tabsize=2
+}
+
 \graphicspath{{Figures},{Plots}}
 
 \newenvironment{Figure}
@@ -112,27 +123,103 @@
             From the provided values we can see that the velocity profile which we were provided has been normalised and we have been provided a reference value.
             Using this reference value we denormalised the normalised velocity profile, to determine the effective velocity profile of the two cylinders.
             \begin{align*}
-                v_{p1} = v_{p0} * v_{p01}
-                v_{p2} = v_{p1} * v_{p02}
+                v_{p1} = v_{p0} \cdot v_{p01}
+                v_{p2} = v_{p1} \cdot v_{p02}
             \end{align*}
             Additionally, we discretized time to a number of discrete times equal to the length of the provided vectors for velocity, angles and arms, as such:
             \begin{lstlisting}[language=Octave]
-                time = linspace(0,t_0,length(e_1));
+time = linspace(0,t_0,length(e_1));
             \end{lstlisting}
 
 
     \section{Cylinder Sizing and Selection}
-        blablabla 
-    
+        \subsection{Crane Kinematics}
+            Before finding the forces on the cylinder we have to determine the kinematics of the crane tip throughout the drive-cycle. We found the $x$ and $z$ position of the crane tip with teh following equations:
+            \begin{align*}
+                x &= L_1 \cdot \cos(\theta_1) + L_2 \cdot \cos(\theta_2)\\
+                z &= L_1 \cdot \sin(\theta_1) + L_2 \cdot \sin(\theta_2) + L_0
+            \end{align*}
+            Using these two values we can create two graphs, one of the tip height throught time and one of the position of the crane in space through the cycle.
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = .78\linewidth]{Plots/CraneTipHeight.png}\\
+                \caption{Height of crane tip with repsect to time}
+            \end{figure}
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = .78\linewidth]{Plots/CraneTipX.png}\\
+                \caption{Crane tip position in space during drive cycle}
+            \end{figure}
+
+        \subsection{Cylinder Drive-cycle}
+            From here we continued by determining the forces on the two cylinders throughout the drive-cycle. We did this by calculating the moment generated on either arm hinge by the respective cylinder and the mass at the crane tip.
+            We determined the resulting forces to have the equations:
+            \begin{align*}
+                F_1 &= M_t\cdot g\cdot \frac{(L_1\cdot\cos(\theta_1) + L_2\cdot\cos(\theta_2))}{e_1}\\
+                F_2 &= M_t\cdot g\cdot \frac{L_2\cdot\cos(\theta_2)}{e_2}
+            \end{align*}
+            The equivalent MATLAB code is as follows:
+            \begin{lstlisting}[language=Octave]
+F_1 = M_t*g*(L_1*cos(th_1)+L_2*cos(th_2))./e_1;
+F_2 = M_t*g*L_2*cos(th_2)./e_2;
+            \end{lstlisting}
+            With $F_1$ and $F_2$ determined, we could now plot how they changed through time.
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = .8\linewidth]{Plots/ForcesPlot.png}\\
+                \caption{Forces on the two cylinders in the system}
+            \end{figure}
+
+        \subsection{Worst-case Scenario and Cylinder Diameter}
+            Using the same equations we used to determine the forces during the drive-cycle, we can find the forces in the worst-case scenario for the system, with the MATLAB code as follows:
+            \begin{lstlisting}
+F_wc_1 = M_tmax*g*(L_1*cos(th_1_wc_cyl1)+L_2*cos(th_2_wc_cyl1))./e_1_wc_cyl1;
+F_wc_2 = M_tmax*g*L_2*cos(th_2_wc_cyl2)./e_2_wc_cyl2;
+            \end{lstlisting}
+            In this case the $\theta$ and $e$ values for either cylinder during the drive-cycle were replaced by the given worst-case scenario values.
+            From these forces we could determine the diameter of the cylinder required to withstand these inopportune forces.
+            We calculated the area and diameter required as:
+            \begin{align*}
+                A_1 &= \frac{F_{1,wc}}{\eta_c \cdot (p_{1,max}-0.5p_2)}\\
+                D_1 &= \sqrt{\frac{4*A_1}{\pi}}\\
+                A_1 &= \frac{F_{2,wc}}{\eta_c \cdot (p_{1,max}-0.5p_2)}\\
+                D_1 &= \sqrt{\frac{4*A_2}{\pi}}
+            \end{align*}
+            In which $p_{1,max} = p_{s,max} - p_{extra}$, where $p_{extra}$ is the unavoidable losses in the system, which he have to account for and which we arbitrarily determined to be $p_{extra} \approx 2000000 Pa$.
+            We determined the following values for the respective variables:
+            \begin{itemize}
+                \item $A_1 = 0.020437$ $m^2$
+                \item $D_1 = 0.1613$ $m$
+                \item $A_2 = 0.014064$ $m^2$
+                \item $D_2 = 0.1338$ $m$
+            \end{itemize}
+            Because no manufacturer produces cylinder of every size, we need to determine the cylinder with diameter which fits our needs.
+            To do this we looked through \textit{Bosch Rexroth's} linear hydraulic cylinder catalogue, and found a suitable candidate.
+            Out of the catalogue we ended up choosing a two Series CGH3 type hydralic cylinders. These cylinders are mill-type, double acting and can withstand the requirement maximum pressure.
+            Of the CGH3 cylinder options we chose a cylinder with a diameter of $180 mm$ and for the second cylinder a diameter of $140mm$. In total the following data was determined necessary:
+            \begin{itemize}
+                \item Cylinder 1 Bore Diameter: $D_1 = 0.18$ $m$
+                \item Cylinder 2 Bore Diamter: $D_2 = 0.14$ $m$
+                \item Cylinder 1 Area on Piston Side: $A_{p1} = 0.025447$ $m^2$
+                \item Cylinder 1 Ring Area on Rod Side: $A_{r1} = 0.013175$ $m^2$
+                \item Cylinder 2 Area on Piston Side: $A_{p2} = 0.015394$ $m^2$
+                \item Cylinder 2 Ring Area on Rod Side: $A_{r2} = 0.007540$ $m^2$
+            \end{itemize}
+            To be absolutely sure we made the right choice we also found the maximum stroke velocities for the respective cylinders and determined them to be:
+            \begin{itemize}
+                \item $v_{1,max} = 0.14 m/s$
+                \item $v_{2,max} = 0.16 m/s$
+            \end{itemize}
+            We then plotted these two values alongside the absolute value of the velocities of the cylinders during their drive-cycles.
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = \linewidth]{Plots/CylinderVelocityPlot.jpg}\\
+                \caption{Determination of being under the maximum stroke velocity throughout cycle}
+            \end{figure}
+            \newline We can see that we are under the maximum stroke velocities throughout the drive-cycle, so there is no issue with our choice.
+
     \section{Circuit Drive-cycle Analysis}
-        sdfvddsfsdfsdf
-        \begin{equation}
-            q = C_qA\sqrt{\frac{2}{\rho}\cdot\Delta p}
-        \end{equation}
-        \begin{figure}[!ht]
-            \centering
-            \includegraphics[width = .8\linewidth]{liu_logo.png}\\
-        \end{figure}
+        
 
     \section{Pump Selection}
 
