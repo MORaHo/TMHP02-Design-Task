@@ -158,18 +158,10 @@ eta_c2 = v_2_pos./eta_c + v_2_neg*eta_c + v_2_stat;
 
 p_2 = p_2*ones(1,length(time));
 p_1_cyl1 = (F_1./eta_c1 + p_2*A_r1)/(A_p1);
-p_1_cyl2 = (p_2*A_r2 + F_2.*eta_c2)/(A_p2);
+p_1_cyl2 = (p_2*A_r2 + F_2./eta_c2)/(A_p2);
 p_1max_cyl1 = max(p_1_cyl1);
 p_1max_cyl2 = max(p_1_cyl2);
 p_min = max([p_1max_cyl1 p_1max_cyl2]) * ones(1,length(time));
-
-%{
-p_min = zeros(1,length(time));
-
-for i = 1:length(time)
-    p_min(i) = max([p_1_cyl1(i) p_1_cyl2(i)]);
-end
-%}
 
 figure(6);
 plot(time,p_1_cyl1);
@@ -201,3 +193,5 @@ title("Volumetric Flow vs Time");
 ylabel("Volumetric Flow (m^3/s)");
 xlabel("Time (s)");
 legend("Cylinder 1","Cylinder 2","Total Flow","Maximum Flow");
+
+% Task 5.a

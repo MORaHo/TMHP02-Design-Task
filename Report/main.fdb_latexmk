@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1790888382.53 "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" "main.pdf" "main" 1790888385.2855 0
-  "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" 1790888379.28242 11292 e1e2602c40d9ff9271fedfae87312403 ""
+["pdflatex"] 1790956851.18631 "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" "main.pdf" "main" 1790956853.78304 0
+  "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" 1790956850.83283 16969 4d385ce601cdfc5a4c4a2ea6b79f988f ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1775415801 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1775415801 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1775415801 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -32,6 +32,7 @@
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1775415801 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1775415801 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1775415801 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1775415801 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1775415801 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1775415801 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1775415801 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
@@ -131,15 +132,17 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1775415801 43569 fd570f2fa160877d211e859f687312ba ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1784384856 5385779 47c0c393a77fd4a098bacfd57d66b88a ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1784384823 3084555 8df58190da1a9144d7be85e710c36b93 ""
+  "CircuitDiagram.png" 1790945982.12598 48003 d4e02a455a6d1ccbf0fadbce8752a161 ""
   "Plots/CraneTipHeight.png" 1790863735.37416 74227 0837757ec09ab266cfb6a8285e46802f ""
   "Plots/CraneTipX.png" 1790863770.83935 82518 1e6f789c0fc32260a5f7e324946942ce ""
-  "Plots/CylinderVelocityPlot.jpg" 1790854228.34884 41362 044bd2ba8c017cbea7b7b67a4098a796 ""
+  "Plots/CylinderVelocityPlot.png" 1790863832.3857 137002 c3f48caf7b60cf6b19503abfd704c660 ""
   "Plots/ForcesPlot.png" 1790863806.17133 84085 cd1f896a9cb79d9f1eabe077a6ea61f7 ""
+  "Plots/PressureTimePlot.jpg" 1790854260.43829 39711 5aac27eb06bc7d075d038f4cc853895c ""
   "colour.tex" 1757833808 893 3d76afc12dd46bc3611425098b7baaad ""
   "liu_logo.png" 1790850028.89512 28325 2408a379bb58fb37b1b395d92f0376b1 ""
-  "main.aux" 1790888385.02418 6354 0f0da35ba522033e97e3f0d24ab4709a "pdflatex"
-  "main.tex" 1790888379.28242 11292 e1e2602c40d9ff9271fedfae87312403 ""
-  "main.toc" 1790888385.03118 1020 52ceb52aa28586aa3a519dc06fa5dfaa "pdflatex"
+  "main.aux" 1790956853.56214 8051 b41329c53f4592f186b7724b681a28fa "pdflatex"
+  "main.tex" 1790956850.83283 16969 4d385ce601cdfc5a4c4a2ea6b79f988f ""
+  "main.toc" 1790956853.57158 1286 3e252423acd1a423594ff6e0c334c7a7 "pdflatex"
   "title_page.tex" 1790854944.45349 1476 76129a9d85ada6a23a353ce4704d4799 ""
   (generated)
   "main.aux"

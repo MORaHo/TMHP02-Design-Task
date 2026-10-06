@@ -213,15 +213,98 @@ F_wc_2 = M_tmax*g*L_2*cos(th_2_wc_cyl2)./e_2_wc_cyl2;
             We then plotted these two values alongside the absolute value of the velocities of the cylinders during their drive-cycles.
             \begin{figure}[!ht]
                 \centering
-                \includegraphics[width = \linewidth]{Plots/CylinderVelocityPlot.jpg}\\
+                \includegraphics[width = \linewidth]{Plots/CylinderVelocityPlot.png}\\
                 \caption{Determination of being under the maximum stroke velocity throughout cycle}
             \end{figure}
             \newline We can see that we are under the maximum stroke velocities throughout the drive-cycle, so there is no issue with our choice.
 
     \section{Circuit Drive-cycle Analysis}
-        
+
+        \subsection{System Pressure}
+        For the drive-cycle analysis we need to determine the pressures and flow our cylinders operate at; this later help us determine what type of system hydraulic circuit we are interested in using.
+        We know that the pressure on the low-pressure side will always be $1 MPa$, and since we know that the sign of the force never changes on either cylinder, we know that the rod side of the cylinder will always be low-pressure side. Because of this we use one single value for $p_2$ for both cylinders.
+        The equation to determine the pressure on the high pressure side of the cylinder depends on whether the cylinder is acting as a pump or a motor.
+        When the cylinder is operating as a pump the equation is:
+        \begin{equation*}
+            p_1 = \frac{p_2\cdot A_2 + \frac{F}{\eta_c}}{A_1}
+        \end{equation*}
+        And when the cylinder is operating as a motor, the equation is:
+        \begin{equation*}
+            p_1 = \frac{p_2\cdot A_2 + \eta_c\cdot F}{A_1}
+        \end{equation*}
+        Since the only difference is how the efficiency changes the resulting force, in MATLAB we can treat this equation as single equation, where $\eta_c$ changes definition based on the sign of the velocity.\\
+        \begin{lstlisting}
+v_1_pos = v_p1 > 0;
+v_1_neg = v_p1 < 0;
+v_1_stat = v_p1 == 0;
+eta_c1 = v_1_pos./eta_c + v_1_neg*eta_c + v_1_stat;
+v_2_pos = v_p2 > 0;
+v_2_neg = v_p2 < 0;
+v_2_stat = v_p2 == 0;
+eta_c2 = v_2_pos./eta_c + v_2_neg*eta_c + v_2_stat;
+
+p_2 = p_2*ones(1,length(time));
+p_1_cyl1 = (F_1./eta_c1 + p_2*A_r1)/(A_p1);
+p_1_cyl2 = (p_2*A_r2 + F_2./eta_c2)/(A_p2);
+        \end{lstlisting}
+        We can also determine the minimum pressure our a constant-pressure pump would have to operate at for the system to function as:\\
+        \begin{lstlisting}
+p_1max_cyl1 = max(p_1_cyl1);
+p_1max_cyl2 = max(p_1_cyl2);
+p_min = max([p_1max_cyl1 p_1max_cyl2]) * ones(1,length(time));
+        \end{lstlisting}
+
+        From these computations we can plot the graph of pressure for the cycle and minimum pressure for the system.
+        \clearpage
+        \begin{figure}[!ht]
+            \centering
+            \includegraphics[width = \linewidth]{Plots/PressureTimePlot.jpg}\\
+            \caption{Pressure in 4 chambers, maximum system pressure, and minimum constant system pressure}
+        \end{figure}
+
+        \subsection{System Flow}
+
+        To determine the flow we also need to consider the sign which the velocity takes during the drive-cycle, as we have to change which chamber the flow moves to.
+        The resulting MATLAB code is as follows.\\
+        \begin{lstlisting}
+q_1 = A_p1*v_p1.*v_1_pos + A_r1*abs(v_p1).*v_1_neg;
+q_2 = A_p2*v_p2.*v_2_pos + A_r1*abs(v_p2).*v_2_neg;
+q_tot = q_1 + q_2;
+q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
+        \end{lstlisting}
+        The equation for $q_{max}$ came from the definition for the worst-case scenario flow ratio, and is the worst-case level of flow that our pump must be able to handle.
+
+        \subsection{Hydraulic System Type and System Diagram}
+            After our analysis of the system pressure and flow, we had to decide what type of circuit our hydraulic system would have.
+            We decided that our hydraulic circuit should be a constant pressure system with variable flow. We made this choice because as can be seen in the respective plots, the pressure is relatively constant
+            when compared to the flow which goes from $~0.0016 m^3/s$ to zero. Since all of the flow during the period where the velocity is zero would be wasted, we believed that the best way to reduce our losses would be to employ this system.
+            We also considered that a more efficient system to reduce the losses further would be a load-sensing system with variable flow. But considering these types of system are even more expensive than the constant-pressure system, we decided
+            to opt for a constant-pressure system to keep that system cost to a more middling cost.
+            Finally the drivability of the system is relatively good, because it exhibit load dependency, which adds high damping to our system making it more drivable. The system also doesn't exhibit load interference which would reduce the drivability.
+
+            After choosing the type of system that we wanted we drew a possible circuit diagram for it.
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = \linewidth]{CircuitDiagram.png}\\
+                \caption{Possible Circuit Diagram}
+            \end{figure}
 
     \section{Pump Selection}
+
+        For pump selection we decided to turn once again to the catalogue of Bosch Rexroth.
+        Looking through their catalogue we found a pump that seemed to fit our requirement. This pump is a A10VZO size 6 pump.
+        This pump has the following parameters:
+        \begin{itemize}
+            \item Maximum Displacement per Revolution, $V_{g,max}$ = $6$ $\text{cm}^3/\text{rev}$
+            \item Maximum Rotational Speed, $n_{nom}$ = $3960$ rpm
+            \item Maximum Pressure, $P_{max}$ = $315$ bar
+            \item Nominal Pressure, $P_{nom}$ = $250$ bar
+        \end{itemize}
+        The pump can operate up to it's maximum rotational speed in either direction. But when the rotational velocity is positive (when it's operating as a pump), and under $200$ rpm, the operating period can only be below $3$ minuntes, if the displacemet is $V_g \leq V_{g,max}$
+        The volumetric flow can be calculated with the following equation:
+        \begin{equation*}
+            q_v = \frac{V_{g,max}\cdot n \cdot \eta_{vol}}{1000} \text{  [lpm]}
+        \end{equation*}
 
     \section{System Analysis and Efficiency}
 

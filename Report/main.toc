@@ -7,6 +7,9 @@
 \contentsline {subsection}{\numberline {2.2}Cylinder Drive-cycle}{4}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Worst-case Scenario and Cylinder Diameter}{4}{subsection.2.3}%
 \contentsline {section}{\numberline {3}Circuit Drive-cycle Analysis}{6}{section.3}%
-\contentsline {section}{\numberline {4}Pump Selection}{6}{section.4}%
-\contentsline {section}{\numberline {5}System Analysis and Efficiency}{6}{section.5}%
-\contentsline {section}{\numberline {6}Cooler Dimensioning}{6}{section.6}%
+\contentsline {subsection}{\numberline {3.1}System Pressure}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}System Flow}{8}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Hydraulic System Type and System Diagram}{8}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Pump Selection}{9}{section.4}%
+\contentsline {section}{\numberline {5}System Analysis and Efficiency}{10}{section.5}%
+\contentsline {section}{\numberline {6}Cooler Dimensioning}{10}{section.6}%
