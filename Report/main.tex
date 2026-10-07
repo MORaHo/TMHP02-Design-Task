@@ -51,7 +51,7 @@
 \newcommand{\advisor}{Samuel Kärnell}
 \newcommand{\firstcoadvisor}{Róger Mateus Sehnem,}
 \newcommand{\secondcoadvisor}{Artur Tozzi de Cantuaria Gama}
-\newcommand{\YEAR}{2026}
+\newcommand{\YEAR}{2026-2027}
 
 \begin{document}
 
@@ -273,6 +273,13 @@ q_tot = q_1 + q_2;
 q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
         \end{lstlisting}
         The equation for $q_{max}$ came from the definition for the worst-case scenario flow ratio, and is the worst-case level of flow that our pump must be able to handle.
+        \clearpage
+
+        \begin{figure}[!ht]
+            \centering
+            \includegraphics[width = \linewidth]{FlowTimePlot.png}\\
+            \caption{Change in Flow with Time}
+        \end{figure}
 
         \subsection{Hydraulic System Type and System Diagram}
             After our analysis of the system pressure and flow, we had to decide what type of circuit our hydraulic system would have.
@@ -292,11 +299,12 @@ q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
     \section{Pump Selection}
 
         For pump selection we decided to turn once again to the catalogue of Bosch Rexroth.
-        Looking through their catalogue we found a pump that seemed to fit our requirement. This pump is a A10VZO size 6 pump.
+        Looking through their catalogue we found a pump that seemed to fit our requirement. This pump is a A10VZO size 45 pump.
         This pump has the following parameters:
         \begin{itemize}
-            \item Maximum Displacement per Revolution, $V_{g,max}$ = $6$ $\text{cm}^3/\text{rev}$
-            \item Maximum Rotational Speed, $n_{nom}$ = $3960$ rpm
+            \item Maximum Displacement per Revolution, $V_{g,max}$ = $45$ $\text{cm}^3/\text{rev}$
+            \item Maximum Flow (at $n_{nom} \text{ and } V_{g,max}$) $q_v$ = $135$ [$\text{lpm}$]
+            \item Maximum Rotational Speed, $n_{nom}$ = $3000$ rpm
             \item Maximum Pressure, $P_{max}$ = $315$ bar
             \item Nominal Pressure, $P_{nom}$ = $250$ bar
         \end{itemize}
@@ -307,6 +315,66 @@ q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
         \end{equation*}
 
     \section{System Analysis and Efficiency}
+
+        The pump maintains a constant system pressure of 13 MPa, which is just above the maximum pressure required throughout the drive-cycle to allow some protection from pressure fluctuations. The graph as expected will just be a constant value:
+        \begin{figure}[!ht]
+            \centering
+            \includegraphics[width = \textwidth]{Plots/SystemPressure.png}\\
+            \caption{System pressure provided by pump}
+        \end{figure}
+        \newline As we've chosen the variable flow pump, the flow will follow the maximum flow required by the system, as follows:
+        \begin{figure}[!ht]
+            \centering
+            \includegraphics[width = \textwidth]{Plots/SystemFlow.png}\\
+            \caption{System Flow provided by pump}
+        \end{figure}
+        \newline Assuming we are operating at a constant $n = n_{nom}$, we can derive the displacement for the pump as:
+        \begin{equation*}
+            V_g = \frac{1000\cdot q_v}{n_{nom}\cdot\eta_v}
+        \end{equation*}
+        \section{Displacement Coefficient and Efficiencies}
+
+            To determine the volumetric and hydro-mechanical efficiency we need to find the displacement coefficient for the pump.
+            To determine this coefficient we used the flow equation from the formula book.
+            \begin{equation*}
+                q_{ep} = \varepsilon \cdot D_p \cdot n \cdot \eta_{vol,p}
+            \end{equation*}
+            The problem now was that we did not have some value, so we relied on some assumptions to determine these values.
+            The first assumption is that $D_p = V_{g,max}$, additionally we also assumed that $n = 2500$ [rpm], and finally we assumed that $q_{ep} = q_{tot}$.
+            Since we are determining the volumetric efficiency from this value, we couldn't assume a value, so what we decided to do was to plug in the equation for the efficiency itself:
+            \begin{equation*}
+                \eta_{vol,p} = 1 - C_v \cdot \frac{\Delta p}{|\varepsilon_p|\cdot n_p\cdot \eta}
+            \end{equation*}
+            Plugging in this equation and isolating $\varepsilon_p$, we got the following equation:
+            \begin{equation*}
+                \varepsilon_p = \frac{q_{pump} + V_{g,max}\cdot C_v \cdot p_{pump} / \eta}{V_{g,max}\cdot n}
+            \end{equation*}
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = \textwidth]{Plots/DisplacementCoefficient.png}\\
+                \caption{Displacment Coefficient}
+            \end{figure}
+
+            For the volumetric and hydro-mechanical we used the equations as indicated in the formula book, which we will report.
+            \begin{equation*}
+                \eta_{vol,p} = 1 - C_v\cdot\frac{\Delta p}{|\varepsilon_p|\cdot n_p \eta}
+            \end{equation*}
+            \begin{equation*}
+                \eta_{hm,p} = \frac{1}{1 + (k_p\cdot k_v\frac{n_p\eta}{\Delta p})\cdot e^{(k_{\varepsilon}(1-|\varepsilon_p|))}}
+            \end{equation*}
+            And the total efficiency is obviously product of the two efficiencies:
+            \begin{equation*}
+                \eta_{tot} = \eta_{vol} \cdot \eta_{hm}
+            \end{equation*}
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = \textwidth]{Plots/EfficienciesPlot.png}\\
+                \caption{Volumetric, Hydro-mechanical and Total Efficiency}
+            \end{figure}
+            
+
+        
+
 
     \section{Cooler Dimensioning}
     

@@ -49,6 +49,14 @@ eta_c = 0.94;
 
 p_2 = 1000000;
 
+%Efficiency Coefficients
+
+c_v = 1.3e-9;
+k_p = 5.4e-2;
+k_v = 6.5e-5;
+k_eps = 0.3;
+eta = 0.03;
+
 % Constants and Time
 
 g = 9.81;
@@ -178,8 +186,8 @@ ylim([0 3e+07]);
 
 % Task 3.b
 
-q_1 = A_p1*v_p1.*v_1_pos + A_r1*abs(v_p1).*v_1_neg;
-q_2 = A_p2*v_p2.*v_2_pos + A_r1*abs(v_p2).*v_2_neg;
+q_1 = A_p1*abs(v_p1).*v_1_pos + A_r1*abs(v_p1).*v_1_neg;
+q_2 = A_p2*abs(v_p2).*v_2_pos + A_r1*abs(v_p2).*v_2_neg;
 q_tot = q_1 + q_2;
 q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
 
@@ -194,4 +202,56 @@ ylabel("Volumetric Flow (m^3/s)");
 xlabel("Time (s)");
 legend("Cylinder 1","Cylinder 2","Total Flow","Maximum Flow");
 
+% 4.b
+
+V_gmax = 45e-6;
+q_vmax = 135*60000;
+n_nom = 3000;
+delta_pmax = 315;
+delt_pnom = 250;
+
 % Task 5.a
+
+p_pump = 13*ones(1,length(time));
+figure(8);
+plot(time,p_pump)
+title("System Pressure through Time");
+xlabel("Time (s)");
+ylabel("Pump pressure (MPa)");
+ylim([0 35]);
+
+% Task 5.b
+
+q_pump = q_tot;
+figure(9);
+plot(time,q_pump);
+title("System Volumetric Flow through Time");
+xlabel("Time (s)");
+ylabel("Volumetric Flow (m^3/s)");
+
+%5.c - Efficiencies
+
+p_pump_mpa = p_pump*10^6;
+
+n = 2500/60;
+eps_p = (q_pump + V_gmax*c_v*p_pump_mpa/eta)./(V_gmax*n);
+eta_vol = 1 - (c_v * p_pump_mpa)./(abs(eps_p)*n*eta);
+eta_hm = 1 ./ (1 + (k_p + k_v*n*eta./p_pump_mpa) .* exp(k_eps.*(1-abs(eps_p))));
+eta_t = eta_vol .* eta_hm;
+
+figure(10);
+plot(time,eps_p);
+title("Pump Displacement Coefficienct through Time");
+xlabel("Time (s)");
+ylabel("Displacement Coefficient [-]");
+
+figure(11);
+plot(time,eta_vol);
+hold on
+plot(time,eta_hm);
+plot(time,eta_tot);
+title("System efficiencies through time");
+xlabel("Time (s)");
+ylabel("Efficiency [-]");
+ylim([0 1]);
+legend("Volumetric Efficiency","Hydro-mechanical efficiency","Total efficiency");
