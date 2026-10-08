@@ -294,6 +294,16 @@ INPUT ./Plots/EfficienciesPlot.png
 INPUT ./Plots/EfficienciesPlot.png
 INPUT ./Plots/EfficienciesPlot.png
 INPUT ./Plots/EfficienciesPlot.png
+INPUT ./Plots/PowerPlot.png
+INPUT ./Plots/PowerPlot.png
+INPUT ./Plots/PowerPlot.png
+INPUT ./Plots/PowerPlot.png
+INPUT ./Plots/PowerPlot.png
+INPUT ./Plots/SystemEfficiency.png
+INPUT ./Plots/SystemEfficiency.png
+INPUT ./Plots/SystemEfficiency.png
+INPUT ./Plots/SystemEfficiency.png
+INPUT ./Plots/SystemEfficiency.png
 INPUT main.aux
 INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb

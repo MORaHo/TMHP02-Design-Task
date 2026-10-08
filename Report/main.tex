@@ -123,8 +123,8 @@
             From the provided values we can see that the velocity profile which we were provided has been normalised and we have been provided a reference value.
             Using this reference value we denormalised the normalised velocity profile, to determine the effective velocity profile of the two cylinders.
             \begin{align*}
-                v_{p1} = v_{p0} \cdot v_{p01}
-                v_{p2} = v_{p1} \cdot v_{p02}
+                v_{p1} &= v_{p0} \cdot v_{p01}\\
+                v_{p2} &= v_{p1} \cdot v_{p02}
             \end{align*}
             Additionally, we discretized time to a number of discrete times equal to the length of the provided vectors for velocity, angles and arms, as such:
             \begin{lstlisting}[language=Octave]
@@ -134,7 +134,7 @@ time = linspace(0,t_0,length(e_1));
 
     \section{Cylinder Sizing and Selection}
         \subsection{Crane Kinematics}
-            Before finding the forces on the cylinder we have to determine the kinematics of the crane tip throughout the drive-cycle. We found the $x$ and $z$ position of the crane tip with teh following equations:
+            Before finding the forces on the cylinder we have to determine the kinematics of the crane tip throughout the drive-cycle. We found the $x$ and $z$ position of the crane tip with the following equations:
             \begin{align*}
                 x &= L_1 \cdot \cos(\theta_1) + L_2 \cdot \cos(\theta_2)\\
                 z &= L_1 \cdot \sin(\theta_1) + L_2 \cdot \sin(\theta_2) + L_0
@@ -371,11 +371,46 @@ q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
                 \includegraphics[width = \textwidth]{Plots/EfficienciesPlot.png}\\
                 \caption{Volumetric, Hydro-mechanical and Total Efficiency}
             \end{figure}
-            
 
-        
+            From the values we found in the section we were able to determine the hydraluc input power:
+            \begin{equation*}
+                P_{in} = p_{pump} \cdot q_{tot}
+            \end{equation*}
+            We also determined the output power with the following MATLAB code:
+            \begin{lstlisting}
+P_out_1 = (v_1_pos.*v_p1.*F_1 + v_1_neg .* q_1 .* p_2 * eta_c);
+P_out_2 = (v_2_pos.*v_p2.*F_2 + v_2_neg .* q_2 .* p_2 * eta_c);
+P_out = P_out_1 + P_out_2;
+            \end{lstlisting}
+            We determined that while the cylinder acted as a pump, the mechanical output power was equal to $v\cdot F$, but when the cylinder acted as a pump we had to consider that we were supplying the low-pressure side alone, so we determined that the output power would be $q\cdot p\cdot \eta_c$.
+            The power graph became the following:
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = 0.8\textwidth]{Plots/PowerPlot.png}\\
+                \caption{Input and Output Power for System}
+            \end{figure}
+            \clearpage
+            With the resulting efficiency being determined by the fraction of input power that becomes output power.
+            \begin{equation*}
+                \eta_{\text{sys}} = \frac{P_{out}}{P_{in}}
+            \end{equation*}
+            \begin{figure}[!ht]
+                \centering
+                \includegraphics[width = \textwidth]{Plots/SystemEfficiency.png}\\
+                \caption{Input and Output Power for System}
+            \end{figure}
+            The efficiency is high when both cylinders are acting as pumps since the pressure required is high, but very low when they are both acting as motors.
+            The highest efficiency is achieved when the required flow is relatively low, and the pressure is near the maximum required, so the losses are at their lowest.
 
+            The efficiency is relatively when compared to other systems such as a load-sensing system. If we had used a load-sensing system we would have higher efficiency, and probably better drivability, but the cost would also greater. Whereas in term of efficiency the constant flow system would probably have lower efficiency in the first-half, but higher efficiency on the second-half.
+            We would not recommend our system because of the very low efficiencies on the return-stroke that also require more expenses on the cooler.
 
     \section{Cooler Dimensioning}
-    
+            We determined the average power loss to be:
+            \begin{equation*}
+                P_{avg} = mean(P_{in}-P_{out})
+            \end{equation*}
+            The average power wasted is approximately $7340 W$. So our active cooler has to have the ability to extract this much power to be able to keep the system at normal operating temperatures.
+            (We are unsure if the answer to this section is correct or sufficient, so this is our best guess while we think through it more).
+
 \end{document}

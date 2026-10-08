@@ -255,3 +255,30 @@ xlabel("Time (s)");
 ylabel("Efficiency [-]");
 ylim([0 1]);
 legend("Volumetric Efficiency","Hydro-mechanical efficiency","Total efficiency");
+
+%5.d
+
+P_in = p_pump_mpa.*q_tot;
+figure(12);
+plot(time,P_in);
+hold on
+
+P_out_1 = (v_1_pos.*v_p1.*F_1 + v_1_neg .* q_1 .* p_2 * eta_c);
+P_out_2 = (v_2_pos.*v_p2.*F_2 + v_2_neg .* q_2 .* p_2 * eta_c);
+P_out = P_out_1 + P_out_2;
+
+plot(time,P_out);
+legend("Input power","Output Power");
+title("Input and Output Power over Time")
+
+eta_sys = P_out ./ P_in;
+figure(13);
+plot(time,eta_sys);
+title("System Efficiencies");
+ylim([0 1]);
+
+%6.a
+avg_work = 0;
+
+%6.b
+P_in_avg = mean(P_in-P_out)

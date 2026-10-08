@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1791405187.02625 "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" "main.pdf" "main" 1791405191.49309 0
-  "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" 1791405182.2647 20755 d858f0a1f82363e50643799c002c4427 ""
+["pdflatex"] 1791462312.93938 "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" "main.pdf" "main" 1791462318.55984 0
+  "/home/matsan/Documents/Coding/DesignTask/Report/main.tex" 1791462307.28098 23675 210252cda0b5625b33e2d5d60e89f6d0 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1775415801 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1775415801 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1775415801 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -141,14 +141,16 @@
   "Plots/EfficienciesPlot.png" 1791404312.26875 86441 88dc9c3919c8c199ab4d7b722e358306 ""
   "Plots/FlowTimePlot.png" 1790863902.68432 168883 207ec850d833b98e5f1e4d611a9e0e5f ""
   "Plots/ForcesPlot.png" 1790863806.17133 84085 cd1f896a9cb79d9f1eabe077a6ea61f7 ""
+  "Plots/PowerPlot.png" 1791459412.45052 86652 5b68b3d9fc3b675915026805c91ce062 ""
   "Plots/PressureTimePlot.jpg" 1790854260.43829 39711 5aac27eb06bc7d075d038f4cc853895c ""
+  "Plots/SystemEfficiency.png" 1791459620.36774 48382 bcf007a78911a4e2cc33cdec03203f96 ""
   "Plots/SystemFlow.png" 1791362654.86473 81919 39cb5aeb820eebba475e5eba32925a25 ""
   "Plots/SystemPressure.png" 1791361322.39434 47205 6a5dd105e5b4a374aa39e53d0c8b631c ""
   "colour.tex" 1757833808 893 3d76afc12dd46bc3611425098b7baaad ""
   "liu_logo.png" 1790850028.89512 28325 2408a379bb58fb37b1b395d92f0376b1 ""
-  "main.aux" 1791405191.20868 9455 081c8862a4853e6689ef77c615c2585c "pdflatex"
-  "main.tex" 1791405182.2647 20755 d858f0a1f82363e50643799c002c4427 ""
-  "main.toc" 1791405191.21968 1385 1c27490d8c5e493d9a35ea0d40575902 "pdflatex"
+  "main.aux" 1791462317.91723 9765 db9b55ce92bb7b3044228c062342e09b "pdflatex"
+  "main.tex" 1791462307.28098 23675 210252cda0b5625b33e2d5d60e89f6d0 ""
+  "main.toc" 1791462317.93423 1385 9d268ad997405773f74dd217b4d4cca8 "pdflatex"
   "title_page.tex" 1791310772.01871 1476 76129a9d85ada6a23a353ce4704d4799 ""
   (generated)
   "main.aux"
