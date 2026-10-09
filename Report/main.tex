@@ -181,9 +181,9 @@ F_wc_2 = M_tmax*g*L_2*cos(th_2_wc_cyl2)./e_2_wc_cyl2;
             We calculated the area and diameter required as:
             \begin{align*}
                 A_1 &= \frac{F_{1,wc}}{\eta_c \cdot (p_{1,max}-0.5p_2)}\\
-                D_1 &= \sqrt{\frac{4*A_1}{\pi}}\\
+                D_1 &= \sqrt{\frac{4\cdot A_1}{\pi}}\\
                 A_1 &= \frac{F_{2,wc}}{\eta_c \cdot (p_{1,max}-0.5p_2)}\\
-                D_1 &= \sqrt{\frac{4*A_2}{\pi}}
+                D_1 &= \sqrt{\frac{4\cdot A_2}{\pi}}
             \end{align*}
             In which $p_{1,max} = p_{s,max} - p_{extra}$, where $p_{extra}$ is the unavoidable losses in the system, which he have to account for and which we arbitrarily determined to be $p_{extra} \approx 2000000 Pa$.
             We determined the following values for the respective variables:
@@ -270,7 +270,7 @@ p_min = max([p_1max_cyl1 p_1max_cyl2]) * ones(1,length(time));
 q_1 = A_p1*v_p1.*v_1_pos + A_r1*abs(v_p1).*v_1_neg;
 q_2 = A_p2*v_p2.*v_2_pos + A_r1*abs(v_p2).*v_2_neg;
 q_tot = q_1 + q_2;
-q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
+q_max = q_tot/q_rwc;
         \end{lstlisting}
         The equation for $q_{max}$ came from the definition for the worst-case scenario flow ratio, and is the worst-case level of flow that our pump must be able to handle.
         \clearpage
@@ -305,8 +305,8 @@ q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
             \item Maximum Displacement per Revolution, $V_{g,max}$ = $45$ $\text{cm}^3/\text{rev}$
             \item Maximum Flow (at $n_{nom} \text{ and } V_{g,max}$) $q_v$ = $135$ [$\text{lpm}$]
             \item Maximum Rotational Speed, $n_{nom}$ = $3000$ rpm
-            \item Maximum Pressure, $P_{max}$ = $315$ bar
-            \item Nominal Pressure, $P_{nom}$ = $250$ bar
+            \item Maximum Pressure, $P_{max}$ = $350$ bar
+            \item Nominal Pressure, $P_{nom}$ = $315$ bar
         \end{itemize}
         The pump can operate up to it's maximum rotational speed in either direction. But when the rotational velocity is positive (when it's operating as a pump), and under $200$ rpm, the operating period can only be below $3$ minuntes, if the displacemet is $V_g \leq V_{g,max}$
         The volumetric flow can be calculated with the following equation:
@@ -347,7 +347,7 @@ q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
             \end{equation*}
             Plugging in this equation and isolating $\varepsilon_p$, we got the following equation:
             \begin{equation*}
-                \varepsilon_p = \frac{q_{pump} + V_{g,max}\cdot C_v \cdot p_{pump} / \eta}{V_{g,max}\cdot n}
+                \varepsilon_p = \frac{q_{tot} + V_{g,max}\cdot C_v \cdot P_{nom} / \eta}{V_{g,max}\cdot n}
             \end{equation*}
             \begin{figure}[!ht]
                 \centering
@@ -372,17 +372,15 @@ q_max = (max(q_tot)/q_rwc)*ones(1,length(time));
                 \caption{Volumetric, Hydro-mechanical and Total Efficiency}
             \end{figure}
 
-            From the values we found in the section we were able to determine the hydraluc input power:
-            \begin{equation*}
-                P_{in} = p_{pump} \cdot q_{tot}
-            \end{equation*}
+            From the values we found in the section we were able to determine the hydraulic input power:
+            \begin{lstlisting}
+P_in = q_tot * delta_pnom ./ eta_tot - v_1_neg .* F_1 .* v_p1 - v_2_neg .* F_2 .* v_p2 ;
+            \end{lstlisting}
             We also determined the output power with the following MATLAB code:
             \begin{lstlisting}
-P_out_1 = (v_1_pos.*v_p1.*F_1 + v_1_neg .* q_1 .* p_2 * eta_c);
-P_out_2 = (v_2_pos.*v_p2.*F_2 + v_2_neg .* q_2 .* p_2 * eta_c);
-P_out = P_out_1 + P_out_2;
+P_out = v_1_pos.*v_p1.*F_1 + v_2_pos.*v_p2.*F_2;
             \end{lstlisting}
-            We determined that while the cylinder acted as a pump, the mechanical output power was equal to $v\cdot F$, but when the cylinder acted as a pump we had to consider that we were supplying the low-pressure side alone, so we determined that the output power would be $q\cdot p\cdot \eta_c$.
+            We determined that while the cylinder acted as a pump, the mechanical output power was equal to $v\cdot F$, but when the cylinder acted as a motor the power can be interpreted as an input power because it is acting onto the system rather than extracting power from the system.
             The power graph became the following:
             \begin{figure}[!ht]
                 \centering
@@ -399,18 +397,20 @@ P_out = P_out_1 + P_out_2;
                 \includegraphics[width = \textwidth]{Plots/SystemEfficiency.png}\\
                 \caption{Input and Output Power for System}
             \end{figure}
-            The efficiency is high when both cylinders are acting as pumps since the pressure required is high, but very low when they are both acting as motors.
-            The highest efficiency is achieved when the required flow is relatively low, and the pressure is near the maximum required, so the losses are at their lowest.
+
+            The efficiency of the system is simply abysmal, but that is to be expected from a constant pressure system. We chose the system for it's relative design simplifity and as a middle-ground between the load-sensing system and constant flow system.
+            The efficiency after around 6 seconds is zero, not because the system is not in motion, but because cylinders are both acting as motors, and so the mechanical power can be considered a power input rather than output, resulting in the output power being zero.
+            A way the energy loss could be reduced slightly is to change the system such that the rod side of the cylinders suck fluid from the tank rather than being filled by the pump, this would allow the displacement coefficient to be zero and reduce some of the losses in the system.
 
             The efficiency is relatively when compared to other systems such as a load-sensing system. If we had used a load-sensing system we would have higher efficiency, and probably better drivability, but the cost would also greater. Whereas in term of efficiency the constant flow system would probably have lower efficiency in the first-half, but higher efficiency on the second-half.
             We would not recommend our system because of the very low efficiencies on the return-stroke that also require more expenses on the cooler.
 
     \section{Cooler Dimensioning}
-            We determined the average power loss to be:
+            The overall work performed by the machine is 0 because the overall displacement of the crane comes out to be 0 at the end of the drive-cycle.
+            Because the effective work is 0, this means that all the power that placed into the system is lost. This means that all the input power eventually becomes heat, and so the average cooling power that we need to supply is the average of the input power.
             \begin{equation*}
-                P_{avg} = mean(P_{in}-P_{out})
+                P_{avg} = mean(P_{in})
             \end{equation*}
-            The average power wasted is approximately $7340 W$. So our active cooler has to have the ability to extract this much power to be able to keep the system at normal operating temperatures.
-            (We are unsure if the answer to this section is correct or sufficient, so this is our best guess while we think through it more).
+            The average power wasted is approximately $35783 W$. So our active cooler has to have the ability to extract this much power to be able to keep the system at normal operating temperatures.
 
 \end{document}

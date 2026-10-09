@@ -207,37 +207,34 @@ legend("Cylinder 1","Cylinder 2","Total Flow","Maximum Flow");
 V_gmax = 45e-6;
 q_vmax = 135*60000;
 n_nom = 3000;
-delta_pmax = 315;
-delt_pnom = 250;
+delta_pmax = 350e5;
+delta_pnom = 315e5;
 
 % Task 5.a
 
-p_pump = 13*ones(1,length(time));
+p_prv = 13*ones(1,length(time));
 figure(8);
 plot(time,p_pump)
 title("System Pressure through Time");
 xlabel("Time (s)");
-ylabel("Pump pressure (MPa)");
+ylabel("System pressure (MPa)");
 ylim([0 35]);
 
 % Task 5.b
 
-q_pump = q_tot;
 figure(9);
-plot(time,q_pump);
+plot(time,q_tot);
 title("System Volumetric Flow through Time");
 xlabel("Time (s)");
 ylabel("Volumetric Flow (m^3/s)");
 
 %5.c - Efficiencies
 
-p_pump_mpa = p_pump*10^6;
-
 n = 2500/60;
-eps_p = (q_pump + V_gmax*c_v*p_pump_mpa/eta)./(V_gmax*n);
-eta_vol = 1 - (c_v * p_pump_mpa)./(abs(eps_p)*n*eta);
-eta_hm = 1 ./ (1 + (k_p + k_v*n*eta./p_pump_mpa) .* exp(k_eps.*(1-abs(eps_p))));
-eta_t = eta_vol .* eta_hm;
+eps_p = (q_tot + V_gmax*c_v*delta_pnom/eta)./(V_gmax*n);
+eta_vol = 1 - (c_v * delta_pnom)./(abs(eps_p)*n*eta);
+eta_hm = 1 ./ (1 + (k_p + k_v*n*eta./delta_pnom) .* exp(k_eps.*(1-abs(eps_p))));
+eta_tot = eta_vol .* eta_hm;
 
 figure(10);
 plot(time,eps_p);
@@ -258,17 +255,16 @@ legend("Volumetric Efficiency","Hydro-mechanical efficiency","Total efficiency")
 
 %5.d
 
-P_in = p_pump_mpa.*q_tot;
-figure(12);
+P_in = q_tot * delta_pnom ./ eta_tot - v_1_neg .* F_1 .* v_p1 - v_2_neg .* F_2 .* v_p2;
+P_in_pump = q_tot * delta_pnom ./eta_tot
+P_out = v_1_pos.*v_p1.*F_1 + v_2_pos.*v_p2.*F_2;
+
+figure(12)
 plot(time,P_in);
 hold on
-
-P_out_1 = (v_1_pos.*v_p1.*F_1 + v_1_neg .* q_1 .* p_2 * eta_c);
-P_out_2 = (v_2_pos.*v_p2.*F_2 + v_2_neg .* q_2 .* p_2 * eta_c);
-P_out = P_out_1 + P_out_2;
-
 plot(time,P_out);
-legend("Input power","Output Power");
+plot(time,P_in_pump);
+legend("Input power","Output Power","Input Power from Pump");
 title("Input and Output Power over Time")
 
 eta_sys = P_out ./ P_in;
@@ -278,7 +274,9 @@ title("System Efficiencies");
 ylim([0 1]);
 
 %6.a
-avg_work = 0;
+avg_wrk = 0;
+P_in_tot = avg_wrk / time(end);
+eta = 0; %P_out/P_in_tot, since all the inputted work is useless the losses will be the same as the total input power.
 
 %6.b
-P_in_avg = mean(P_in-P_out)
+P_in_avg = mean(P_in) %since all the power we put eventually becomes losses as the start and end position are the same, we end up having to remove the average input power as it is the same as the losses.
